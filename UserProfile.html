@@ -1,0 +1,153 @@
+<!DOCTYPE html> <!-- Tasneems code's  -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmony Hub - User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- paths to static  css -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet"><!--  fonts  are used  -->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"> <!-- path to css -->
+<body>
+    <div class="login_header">
+        <nav class="navbar navbar-dark custom-bg-color" aria-label="label">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarsExample01">
+                    <ul class="navbar-nav me-auto mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container custom-container mt-4">
+        <h2 class="text-center mb-4">User Profile</h2>
+        <div class="row justify-content-center">
+            <!-- User form done below  -->
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h5 class="card-title text-center">User Info</h5>
+                    <form id="profileForm">
+                        <h6>Employee Details</h6>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="department" placeholder="Department" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="job_title" placeholder="Job Title" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="phone_number" placeholder="Phone Number" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="address" placeholder="Address" required>
+                        </div>
+
+                        <h6>Payroll Details</h6>
+                        <div class="mb-3">
+                            <input type="number" class="form-control" name="salary" placeholder="Salary" required>
+                        </div>
+
+                        <h6>Upload CV</h6>
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Choose a file (PDF, DOC, DOCX, TXT):</label>
+                            <input type="file" class="form-control" id="file" name="file" accept=".pdf,.doc,.docx,.txt" required>
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Submit Profile</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Display users information -->
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h5 class="card-title text-center">Display Info</h5>
+                    <div class="text-center">
+                        <button class="btn btn-info mb-3" onclick="displayInfo()">Show Info</button>
+                        <div id="infoPopup"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function displayInfo() { // Displaying the information 
+            fetch('/display_info') // Fetches the display_info from the app.py file functions work 
+                .then(response => response.json())
+                .then(data => {
+                    const infoPopup = document.getElementById('infoPopup'); // Display the info Popup 
+                    infoPopup.innerHTML = `
+                        <button class="close-btn" onclick="closePopup()">×</button>
+                        <h5>Employee Details:</h5>
+                        <p>Department: ${data.department || "N/A"}</p>
+                        <p>Job Title: ${data.job_title || "N/A"}</p>
+                        <p>Phone Number: ${data.phone_number || "N/A"}</p>
+                        <p>Address: ${data.address || "N/A"}</p>
+                        <p>Salary: ${data.salary || "N/A"}</p>
+                        <p>CV name: ${data.cv_filename || "N/A"}</p>
+                    `;
+                    infoPopup.classList.add('show');  // Display the popup
+                })
+                .catch(err => console.error('Error fetching info:', err));
+        }
+
+         function closePopup() {
+                const infoPopup = document.getElementById('infoPopup');
+                infoPopup.classList.remove('show');  // Function for closing the popup
+         }
+
+
+        
+         document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevention defult submission.
+            
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch('/save_user_profile', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(message => {
+                // Display success
+                document.getElementById('responseMessage').innerHTML = `
+                    <div class="alert alert-success">${message}</div>
+                `;
+                
+                // Reset the form after its submitted 
+                form.reset(); 
+
+                // Clear all fields explicitly
+                const inputs = form.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.value = ''; // Clear the input field 
+                });
+
+                // Clear additional messages or reset feedback
+                const infoPopup = document.getElementById('infoPopup');
+                if (infoPopup) {
+                    infoPopup.innerHTML = ''; // Clear info popup content
+                    infoPopup.classList.remove('show'); // Hide the popup if visible
+                }
+            })
+            .catch(error => {
+                // Show error message
+                document.getElementById('responseMessage').innerHTML = `
+                    <div class="alert alert-danger">Error: ${error.message}</div>
+                `;
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

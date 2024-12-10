@@ -1,0 +1,103 @@
+<!DOCTYPE html> <!-- Tazneem code's  -->
+<html lang="en">
+<head>
+    <title>Welcome to HR HARMONY HUB</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nova+Square&display=swap" rel="stylesheet"> <!-- google fonts  -->
+    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}"> <!-- path to static folder css -->
+</head>
+
+<div class="login_header">
+    <nav class="navbar navbar-dark custom-bg-color" aria-label="label">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="true" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse" id="navbarsExample01" style>
+                <ul class="navbar-nav me-auto mb2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('register')}}">Register Today!</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('login')}}">Hub Login!</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>   
+</nav>
+<body class="home-page">
+<div class="container custom-mt-5">
+    <div class="row justify-content-center">
+        <h1 class="text-center mb-4">Welcome to HR Harmony Hub</h1>
+
+        <!-- HomePage Description  -->
+             <p class="text-center mb-4">
+                Harmony Hub is an innovative HR application designed to streamline essential human resource management processes for users. With its user-friendly interface, Harmony Hub empowers individuals to access and manage their employee directory, providing a comprehensive overview of their professional details and current status. The platform also simplifies leave management by allowing users to track their leave balances, attendance records, and employment history. Furthermore, Harmony Hub enables users to apply for jobs directly through the application, ensuring they stay connected with career opportunities tailored to their skills and interests. By integrating these features, Harmony Hub offers a seamless solution to enhance workplace productivity and engagement.
+            </p>
+            
+        <!-- Clickable Modal to display information  -->
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <div class="grid-item" onclick="openModal('Payroll', 'Payroll Management allows our client to management Their bank details where they can updated these details and save them the stress from contacting the office.')">
+                    <img src="{{url_for('static', filename='img/payroll.png')}}" alt="logo" width="180"  class="rounded">
+                    <p>Payroll</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="grid-item" onclick="openModal('Leave Management', 'The leave management allows our clients to be track their employment leave and attendance ')">
+                    <img src="{{url_for('static', filename='img/leave.png')}}" alt="logo" width="180"  class="rounded">
+                    <p>Leave Management</p>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="grid-item" onclick="openModal('Employee Directory', 'Manage your directory check your current CV')">
+                    <img src="{{url_for('static', filename='img/employee.png')}}" alt="logo" width="180"  class="rounded"> 
+                    <p>Employee Directory </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal content  -->
+<div id="myModal" class="modal" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modalTitle" class="modal-title"></h5>
+                <button type="button" class="btn-close" aria-label="Close" onclick="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalDescription"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+<script> // Function for click Modal 
+    function openModal(title, description) {
+        const modal = document.getElementById("myModal");
+        const modalTitle = document.getElementById("modalTitle");
+        const modalDescription = document.getElementById("modalDescription");
+
+        modal.style.display = "block";
+        modalTitle.innerText = title;
+        modalDescription.innerText = description;
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
